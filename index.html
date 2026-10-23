@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>組み込みソフトウェア開発30年以上｜RL78・旧型マイコン対応｜石井ソフト設計</title>
+  <meta name="description" content="石井ソフト設計は、組み込みソフトウェア開発30年以上の経験を生かし、RL78を中心に8ビットから32ビットまで幅広いマイコンに対応します。旧型マイコンの保守・改修もご相談ください。詳細設計、実装、評価、業務委託・受託開発に対応します。">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#102b49">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:title" content="石井ソフト設計｜組み込みソフトウェア開発">
+  <meta property="og:description" content="組み込み開発30年以上。RL78を中心に、8ビットから32ビット・旧型マイコンまで。">
+  <style>
+    :root {
+      --navy: #102b49;
+      --navy-2: #173c63;
+      --blue: #1769d2;
+      --blue-light: #eaf3ff;
+      --ink: #182b40;
+      --muted: #5c6c7d;
+      --line: #dce5ee;
+      --paper: #ffffff;
+      --soft: #f4f7fa;
+      --radius: 18px;
+      --shadow: 0 16px 40px rgba(16, 43, 73, .09);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+        "Hiragino Sans", Meiryo, sans-serif;
+      line-height: 1.8;
+      letter-spacing: .015em;
+    }
+    a { color: inherit; }
+    a:focus-visible, button:focus-visible { outline: 3px solid #83b7ff; outline-offset: 3px; }
+    .container { width: min(1120px, calc(100% - 40px)); margin-inline: auto; }
+    .site-header {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(255,255,255,.96); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(220,229,238,.85);
+    }
+    .header-inner { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; flex-direction: column; text-decoration: none; line-height: 1.25; flex-shrink: 0; }
+    .brand-jp { font-size: 1.24rem; font-weight: 800; letter-spacing: .04em; color: var(--navy); }
+    .brand-en { margin-top: 4px; font-size: .7rem; letter-spacing: .12em; color: var(--muted); }
+    .nav { display: flex; align-items: center; gap: 22px; }
+    .nav a { font-size: .88rem; font-weight: 650; text-decoration: none; color: #344b62; }
+    .nav a:hover { color: var(--blue); }
+    .nav .nav-cta { color: white; background: var(--blue); padding: 10px 15px; border-radius: 9px; }
+    .menu-toggle { display: none; border: 1px solid var(--line); background: white; border-radius: 9px; padding: 8px 12px; color: var(--navy); font: inherit; }
+    .hero {
+      position: relative; overflow: hidden; color: white;
+      background:
+        radial-gradient(ellipse at 82% 38%, rgba(41,132,224,.38), transparent 32%),
+        linear-gradient(112deg, #0b2037 0%, #102f50 58%, #17466e 100%);
+    }
+    .hero::before {
+      content: ""; position: absolute; inset: 0; opacity: .17; pointer-events: none;
+      background-image: linear-gradient(30deg, transparent 48%, #78b8f2 49%, transparent 50%),
+        linear-gradient(150deg, transparent 48%, #78b8f2 49%, transparent 50%);
+      background-size: 62px 62px;
+      mask-image: linear-gradient(90deg, transparent, black);
+    }
+    .hero-inner { position: relative; display: grid; grid-template-columns: 1.1fr .9fr; align-items: center; gap: 36px; padding-block: 86px 82px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: #a9d3ff; font-size: .82rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 26px; height: 2px; background: #62aaff; }
+    h1 { margin: 18px 0 18px; font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.35; letter-spacing: .025em; }
+    .hero-lead { max-width: 650px; margin: 0; color: #e2edf8; font-size: clamp(1rem, 1.7vw, 1.2rem); }
+    .hero-points { margin: 24px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 9px; }
+    .hero-points li { border: 1px solid rgba(200,226,255,.32); border-radius: 999px; padding: 5px 11px; font-size: .82rem; color: #f1f7ff; background: rgba(255,255,255,.05); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 12px 19px; border-radius: 10px; text-decoration: none; font-weight: 750; transition: transform .2s, background .2s; }
+    .button:hover { transform: translateY(-2px); }
+    .button-primary { background: #2478e6; color: white; box-shadow: 0 8px 22px rgba(0,0,0,.16); }
+    .button-primary:hover { background: #3988f0; }
+    .button-outline { border: 1px solid rgba(255,255,255,.62); color: white; }
+    .button-outline:hover { background: rgba(255,255,255,.08); }
+    .hero-art { position: relative; min-height: 310px; display: grid; place-items: center; }
+    .chip-board {
+      width: min(100%, 410px); aspect-ratio: 1.12; position: relative; overflow: hidden;
+      border: 1px solid rgba(148,202,255,.4); border-radius: 28px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(41,137,231,.45), transparent 34%),
+        repeating-linear-gradient(0deg, transparent 0 22px, rgba(107,180,244,.15) 23px 24px),
+        repeating-linear-gradient(90deg, transparent 0 22px, rgba(107,180,244,.15) 23px 24px),
+        linear-gradient(145deg, #153e64, #071a2c);
+      box-shadow: 0 30px 65px rgba(0,0,0,.28), inset 0 0 45px rgba(49,137,219,.13);
+      transform: rotate(2deg);
+    }
+    .chip { position: absolute; display: grid; place-items: center; text-align: center; color: #d8eaff; background: linear-gradient(145deg, #253e58, #0b1828); border: 2px solid #7796b7; box-shadow: 0 12px 22px rgba(0,0,0,.32); font-weight: 800; letter-spacing: .08em; }
+    .chip::before, .chip::after { content: ""; position: absolute; background: repeating-linear-gradient(90deg, #a3c4e4 0 3px, transparent 3px 10px); height: 8px; left: 8px; right: 8px; }
+    .chip::before { top: -9px; } .chip::after { bottom: -9px; }
+    .chip-main { width: 47%; height: 43%; top: 26%; left: 26%; font-size: 1.1rem; border-radius: 10px; }
+    .chip-main small { display: block; font-size: .66rem; color: #91c7ff; font-weight: 600; }
+    .chip-sub { width: 26%; height: 23%; right: 7%; bottom: 9%; border-radius: 8px; font-size: .75rem; }
+    .chip-label { position: absolute; left: 8%; bottom: 10%; color: #8fc7ff; font-size: .7rem; letter-spacing: .18em; }
+    .section { padding: 82px 0; }
+    .section-soft { background: var(--soft); }
+    .section-head { max-width: 720px; margin-bottom: 36px; }
+    .section-kicker { margin: 0 0 8px; color: var(--blue); font-size: .78rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    h2 { margin: 0; color: var(--navy); font-size: clamp(1.65rem, 3vw, 2.35rem); line-height: 1.4; letter-spacing: .02em; }
+    .section-intro { margin: 14px 0 0; color: var(--muted); }
+    .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .feature-card { padding: 23px 20px; background: white; border: 1px solid var(--line); border-radius: var(--radius); }
+    .icon-box { width: 48px; height: 48px; display: grid; place-items: center; color: var(--blue); background: var(--blue-light); border-radius: 13px; font-size: 1.35rem; font-weight: 800; }
+    .feature-card h3 { margin: 17px 0 8px; color: var(--navy); font-size: 1.03rem; }
+    .feature-card p { margin: 0; color: var(--muted); font-size: .91rem; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 42px; align-items: start; }
+    .issue-list { display: grid; gap: 12px; margin: 25px 0 0; padding: 0; list-style: none; }
+    .issue-list li { position: relative; padding: 13px 16px 13px 43px; background: white; border: 1px solid var(--line); border-radius: 11px; }
+    .issue-list li::before { content: "✓"; position: absolute; left: 16px; top: 12px; color: var(--blue); font-weight: 900; }
+    .service-list { display: grid; gap: 14px; }
+    .service-item { display: grid; grid-template-columns: 45px 1fr; gap: 15px; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: white; }
+    .service-number { color: var(--blue); font-size: 1.1rem; font-weight: 850; }
+    .service-item h3 { margin: 0 0 4px; color: var(--navy); font-size: 1rem; }
+    .service-item p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .project-card { overflow: hidden; background: white; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 7px 22px rgba(16,43,73,.04); }
+    .project-top { min-height: 118px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; color: white; background: linear-gradient(135deg, #153d65, #2377c7); }
+    .project-top span { font-size: .76rem; color: #cce5ff; font-weight: 750; letter-spacing: .08em; }
+    .project-top strong { font-size: 1.08rem; line-height: 1.5; }
+    .project-body { padding: 22px; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+    .tag { display: inline-block; padding: 4px 8px; color: #24517c; background: #edf5ff; border-radius: 6px; font-size: .75rem; font-weight: 700; }
+    .project-body h3 { margin: 0 0 8px; color: var(--navy); font-size: 1.02rem; }
+    .project-body p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .notice { margin-top: 18px; padding: 13px 16px; border-left: 3px solid #d29b27; color: #6c5a35; background: #fff9e9; border-radius: 0 9px 9px 0; font-size: .86rem; }
+    .tech-wrap { display: grid; grid-template-columns: .9fr 1.1fr; gap: 42px; align-items: start; }
+    .tech-table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+    .tech-table th, .tech-table td { padding: 14px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); font-size: .9rem; }
+    .tech-table th { width: 34%; color: var(--navy); background: #f5f8fc; font-weight: 750; }
+    .tech-table tr:last-child th, .tech-table tr:last-child td { border-bottom: 0; }
+    .flow-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; counter-reset: step; }
+    .flow-card { position: relative; padding: 22px 17px; background: white; border: 1px solid var(--line); border-radius: 14px; counter-increment: step; }
+    .flow-card::before { content: "STEP 0" counter(step); display: block; margin-bottom: 12px; color: var(--blue); font-size: .75rem; font-weight: 850; letter-spacing: .1em; }
+    .flow-card h3 { margin: 0 0 7px; color: var(--navy); font-size: 1rem; }
+    .flow-card p { margin: 0; color: var(--muted); font-size: .88rem; }
+    .profile-card { display: grid; grid-template-columns: 100px 1fr; gap: 24px; padding: 28px; background: white; border: 1px solid var(--line); border-radius: var(--radius); }
+    .profile-mark { display: grid; place-items: center; width: 100px; height: 100px; color: white; background: linear-gradient(145deg, var(--navy), #2879bd); border-radius: 22px; font-size: 2rem; font-weight: 850; }
+    .profile-card h3 { margin: 0 0 8px; color: var(--navy); font-size: 1.2rem; }
+    .profile-card p { margin: 0; color: var(--muted); }
+    .profile-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 17px; }
+    .profile-meta span { padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; color: #34536f; font-size: .8rem; }
+    .contact-band { padding: 55px 0; color: white; background: linear-gradient(110deg, #0b2037, #174d7b); }
+    .contact-inner { display: flex; align-items: center; justify-content: space-between; gap: 30px; }
+    .contact-band h2 { color: white; font-size: clamp(1.5rem, 3vw, 2.1rem); }
+    .contact-band p { margin: 10px 0 0; color: #d4e5f6; }
+    .contact-band .button { flex-shrink: 0; background: white; color: var(--navy); }
+    .email-note { margin-top: 12px !important; font-size: .86rem; }
+    .site-footer { padding: 28px 0; color: #b8c8d8; background: #08192a; font-size: .82rem; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+    .footer-brand { color: white; font-weight: 750; }
+    .footer-links { display: flex; gap: 17px; flex-wrap: wrap; }
+    .footer-links a { text-decoration: none; }
+    .footer-links a:hover { color: white; }
+    .small-print { margin-top: 13px; color: #8fa3b7; font-size: .75rem; }
+    @media (max-width: 920px) {
+      .nav { gap: 13px; }
+      .nav a { font-size: .8rem; }
+      .hero-inner { grid-template-columns: 1fr .75fr; gap: 20px; padding-block: 70px; }
+      .feature-grid { grid-template-columns: repeat(2, 1fr); }
+      .project-grid { grid-template-columns: 1fr 1fr; }
+      .project-card:last-child { grid-column: span 2; }
+      .tech-wrap { grid-template-columns: 1fr; gap: 28px; }
+    }
+    @media (max-width: 700px) {
+      .container { width: min(100% - 32px, 560px); }
+      .header-inner { min-height: 68px; }
+      .brand-jp { font-size: 1.08rem; }
+      .menu-toggle { display: inline-block; }
+      .nav { display: none; position: absolute; top: 68px; left: 0; right: 0; padding: 14px 20px 20px; background: white; border-bottom: 1px solid var(--line); box-shadow: 0 16px 24px rgba(16,43,73,.08); align-items: stretch; flex-direction: column; gap: 0; }
+      .nav.open { display: flex; }
+      .nav a { padding: 11px 4px; font-size: .95rem; }
+      .nav .nav-cta { margin-top: 8px; text-align: center; padding: 11px 15px; }
+      .hero-inner { grid-template-columns: 1fr; padding-block: 57px 52px; }
+      .hero-art { min-height: 220px; }
+      .chip-board { width: min(100%, 330px); }
+      h1 { font-size: clamp(1.9rem, 8vw, 2.7rem); }
+      .section { padding: 60px 0; }
+      .feature-grid, .project-grid, .flow-grid { grid-template-columns: 1fr; }
+      .project-card:last-child { grid-column: auto; }
+      .split { grid-template-columns: 1fr; gap: 36px; }
+      .contact-inner { align-items: flex-start; flex-direction: column; }
+      .contact-band .button { width: 100%; }
+      .profile-card { grid-template-columns: 1fr; padding: 22px; }
+      .profile-mark { width: 76px; height: 76px; border-radius: 18px; font-size: 1.6rem; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+      .tech-table th, .tech-table td { padding: 11px 12px; font-size: .84rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
+    }
+  
+
+
+
+/* Compact watercolor portrait beside the hero development-workspace image */
+.hero-portrait {
+  width: clamp(120px, 18vw, 220px);
+  height: auto;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(25, 45, 75, 0.15);
+}
+
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#home" aria-label="石井ソフト設計 ホーム">
+        <span class="brand-jp">石井ソフト設計</span>
+        <span class="brand-en">ISHII SOFTWARE DESIGN</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">メニュー ☰</button>
+      <nav class="nav" id="site-nav" aria-label="メインナビゲーション">
+        <a href="#services">サービス</a>
+        <a href="#projects">開発実績</a>
+        <a href="#technology">対応技術</a>
+        <a href="#profile">プロフィール</a>
+        <a class="nav-cta" href="#contact">お問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-inner">
+        <div>
+          <span class="eyebrow">Embedded Software Engineering</span>
+          <h1>組み込み開発30年以上。<br>RL78から旧型マイコンまで。</h1>
+          <p class="hero-lead">組み込みソフトウェア開発30年以上。RL78マイコンを中心に、8ビットから32ビットまで幅広く対応します。70歳の現在も現役の技術者として、半導体関連装置・理化学機器・医療機器などの分野で培った経験を生かし、詳細設計、実装、評価まで丁寧に取り組みます。旧型マイコンを使用した製品の保守・改修もご相談ください。</p>
+          <ul class="hero-points">
+            <li>組み込み開発経験30年以上</li>
+            <li>RL78中心・8〜32ビット対応</li>
+            <li>C言語</li>
+          </ul>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#contact">✉ お問い合わせ・ご相談</a>
+            <a class="button button-outline" href="#projects">開発実績を見る →</a>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="chip-board">
+            <div class="chip chip-main">RENESAS<br>RX<small>MICROCONTROLLER</small></div>
+            <div class="chip chip-sub">RL78</div>
+            <span class="chip-label">ISHII SOFTWARE DESIGN</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" aria-label="特徴">
+      <div class="container feature-grid">
+        <article class="feature-card">
+          <div class="icon-box" aria-hidden="true">▦</div>
+          <h3>Renesasマイコン対応</h3>
+          <p>RXシリーズ、RL78シリーズを中心に、マイコン向け組み込みソフトウェア開発を支援します。</p>
+        </article>
+        <article class="feature-card">
+          <div class="icon-box" aria-hidden="true">&lt;/&gt;</div>
+          <h3>C言語による開発</h3>
+          <p>組み込みソフトウェアの設計・実装・改修を、仕様や既存コードを踏まえて進めます。</p>
+        </article>
+        <article class="feature-card">
+          <div class="icon-box" aria-hidden="true">⚙</div>
+          <h3>詳細設計〜実装・評価</h3>
+          <p>詳細設計から実装、デバッグ、テスト、実機評価まで一貫して対応します。</p>
+        </article>
+        <article class="feature-card">
+          <div class="icon-box" aria-hidden="true">↔</div>
+          <h3>業務委託・受託開発</h3>
+          <p>プロジェクトの規模や内容、ご希望の進め方に応じて、契約形態をご相談いただけます。</p>
+        </article>
+      </div>
+    </section>
+
+    <img class="hero-portrait" src="images/profile-watercolor.png" alt="石井ソフト設計 代表者の手描き風イラスト" loading="lazy">
+<section class="section" id="services">
+      <div class="container split">
+        <div>
+          <div class="section-head">
+            <p class="section-kicker">Support</p>
+            <h2>組み込み開発のお困りごとを、技術で支援します。</h2>
+            <p class="section-intro">開発リソースの不足から既存ソフトウェアの改修まで、課題やご要望を伺い、対応可能な範囲をご提案します。</p>
+          </div>
+          <ul class="issue-list">
+            <li>RL78や旧型マイコンに詳しい開発経験者を探している</li>
+            <li>既存ファームウェアに機能を追加したい</li>
+            <li>不具合の原因調査やデバッグを依頼したい</li>
+            <li>詳細設計からテスト・実機評価まで支援してほしい</li>
+          </ul>
+        </div>
+        <div class="service-list">
+          <article class="service-item">
+            <div class="service-number">01</div>
+            <div><h3>組み込みソフトウェア開発</h3><p>C言語によるマイコン制御プログラム、ファームウェアの設計・実装を支援します。</p></div>
+          </article>
+          <article class="service-item">
+            <div class="service-number">02</div>
+            <div><h3>既存ソフトウェアの改修・機能追加</h3><p>既存仕様やソースコードを確認し、仕様変更や機能追加、修正に対応します。</p></div>
+          </article>
+          <article class="service-item">
+            <div class="service-number">03</div>
+            <div><h3>デバッグ・ソフトウェア開発</h3><p>発生条件の整理、原因調査、修正、関連機能を含む動作確認を行います。</p></div>
+          </article>
+          <article class="service-item">
+            <div class="service-number">04</div>
+            <div><h3>テスト・実機評価</h3><p>仕様に基づくテストや実機での動作確認を通じて、品質確保を支援します。</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="projects">
+      <div class="container">
+        <div class="section-head">
+          <p class="section-kicker">Projects</p>
+          <h2>開発実績</h2>
+          <p class="section-intro">対応可能な業務をイメージしていただくための掲載例です。公開時には、実際に経験した案件の内容に差し替えてください。</p>
+        </div>
+        <div class="project-grid">
+          <article class="project-card">
+            <div class="project-top"><span>PROJECT 01 / 新規開発</span><strong>マイコン向け組み込みソフトウェア開発</strong></div>
+            <div class="project-body">
+              <div class="tag-row"><span class="tag">Renesas RX</span><span class="tag">C言語</span><span class="tag">詳細設計</span></div>
+              <h3>担当内容の掲載例</h3>
+              <p>詳細設計書に基づくプログラム実装、モジュール単位の動作確認、不具合修正、実機評価など。</p>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-top"><span>PROJECT 02 / 改修・機能追加</span><strong>既存ファームウェアの改修</strong></div>
+            <div class="project-body">
+              <div class="tag-row"><span class="tag">Renesas RL78</span><span class="tag">C言語</span><span class="tag">機能追加</span></div>
+              <h3>担当内容の掲載例</h3>
+              <p>既存ソースコードと仕様の確認、変更箇所の設計・実装、既存機能への影響確認、回帰テストなど。</p>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-top"><span>PROJECT 03 / 解析・評価</span><strong>組み込みソフトウェア開発</strong></div>
+            <div class="project-body">
+              <div class="tag-row"><span class="tag">C言語</span><span class="tag">デバッグ</span><span class="tag">実機評価</span></div>
+              <h3>担当内容の掲載例</h3>
+              <p>不具合の発生条件の整理、原因調査、修正、再発確認、関連機能を含む動作検証など。</p>
+            </div>
+          </article>
+        </div>
+        <p class="notice">掲載前に、各実績を実際の経験に合わせて修正してください。守秘義務がある場合は、顧客名・製品名・内部仕様を伏せ、公開可能な範囲で一般化して紹介します。</p>
+      </div>
+    </section>
+
+    <section class="section" id="technology">
+      <div class="container tech-wrap">
+        <div>
+          <div class="section-head">
+            <p class="section-kicker">Technology</p>
+            <h2>対応技術</h2>
+            <p class="section-intro">経験のあるマイコン、開発言語、工程を明確にし、技術要件との適合性を判断しやすくします。</p>
+          </div>
+          <div class="tag-row">
+            <span class="tag">RL78</span><span class="tag">8〜32ビットマイコン</span><span class="tag">旧型マイコン</span><span class="tag">C言語</span><span class="tag">詳細設計</span><span class="tag">デバッグ</span>
+          </div>
+        </div>
+        <table class="tech-table">
+          <tbody><tr><th>年齢</th><td>70歳</td></tr><tr><th>経験分野</th><td>半導体関連装置、理化学機器、医療機器</td></tr>
+            <tr><th scope="row">マイコン</th><td>RL78シリーズを中心に、8ビット・16ビット・32ビットマイコン、旧型マイコンにも対応</td></tr>
+            <tr><th scope="row">開発言語</th><td>C言語</td></tr>
+            <tr><th scope="row">主な工程</th><td>詳細設計、実装、デバッグ、テスト、実機評価</td></tr>
+            <tr><th scope="row">開発環境</th><td>実際に使用経験のあるIDE・デバッガ等を追記してください</td></tr>
+            <tr><th scope="row">周辺機能</th><td>経験に応じてタイマ、割り込み、ADC、UART、SPI、I²C、CAN等を追記</td></tr>
+            <tr><th scope="row">契約形態</th><td>業務委託、受託開発（詳細はご相談）</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="flow">
+      <div class="container">
+        <div class="section-head">
+          <p class="section-kicker">Process</p>
+          <h2>ご相談から開発開始まで</h2>
+          <p class="section-intro">業務内容や条件を確認し、双方で認識を合わせてから進めます。</p>
+        </div>
+        <div class="flow-grid">
+          <article class="flow-card"><h3>お問い合わせ</h3><p>開発内容、希望時期、ご要望などをお知らせください。</p></article>
+          <article class="flow-card"><h3>内容の確認</h3><p>仕様、担当工程、開発環境、成果物などを確認します。</p></article>
+          <article class="flow-card"><h3>条件のご提案</h3><p>対応範囲、スケジュール、契約条件を整理します。</p></article>
+          <article class="flow-card"><h3>開発開始</h3><p>合意した内容に基づき、設計・実装・評価を進めます。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="profile">
+      <div class="container">
+        <div class="section-head">
+          <p class="section-kicker">Profile</p>
+          <h2>石井ソフト設計について</h2>
+        </div>
+        <div class="profile-card">
+          <div class="profile-mark" aria-hidden="true">ISD</div>
+          <div>
+            <h3>石井ソフト設計 <span style="font-size:.82rem;color:#64788b;font-weight:500;">/ Ishii Software Design</span></h3>
+            <p>組み込みソフトウェア開発に30年以上携わり、RL78マイコンを中心に、8ビットから32ビットまで幅広いマイコンの開発に対応します。70歳の現在も現役の技術者として、詳細設計から実装・評価まで取り組んでいます。半導体関連装置・理化学機器・医療機器などの開発経験を生かし、新しいマイコンから旧型マイコンまで対応します。</p>
+            <div class="profile-meta"><span>組み込み開発経験30年以上</span><span>70歳・現役</span><span>RL78・旧型マイコン</span><span>業務委託・受託開発</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-band" id="contact">
+      <div class="container contact-inner">
+        <div>
+          <h2>組み込みソフトウェア開発のご相談をお待ちしております。</h2>
+          <p>新規開発、既存プログラムの改修、ソフトウェア開発、開発支援など、お気軽にご相談ください。</p>
+          <p class="email-note">メールアドレス：公開前に下記の仮アドレスを実際の連絡先へ変更してください。</p>
+        </div>
+        <!-- お問い合わせ先は公開用Gmailアドレスに設定済みです。 -->
+        <a class="button" href="mailto:i412system@gmail.com@gmail.com?subject=%E7%9F%B3%E4%BA%95%E3%82%BD%E3%83%95%E3%83%88%E8%A8%AD%E8%A8%88%E3%81%B8%E3%81%AE%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B">✉ i412system@gmail.com@gmail.com</a>
+      </div>
+    </section>
+  </main>
+
+  
+<footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div><div class="footer-brand">石井ソフト設計</div><div>ISHII SOFTWARE DESIGN</div></div>
+        <div class="footer-links"><a href="#services">サービス</a><a href="#projects">開発実績</a><a href="#technology">対応技術</a><a href="#profile">プロフィール</a><a href="#contact">お問い合わせ</a></div>
+      </div>
+      <div class="small-print">© <span id="year">2026</span> Ishii Software Design. All rights reserved.</div>
+    </div>
+  </footer>
+  <script>
+    const menuButton = document.querySelector(".menu-toggle");
+    const nav = document.querySelector("#site-nav");
+    menuButton.addEventListener("click", () => {
+      const isOpen = nav.classList.toggle("open");
+      menuButton.setAttribute("aria-expanded", String(isOpen));
+    });
+    nav.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        nav.classList.remove("open");
+        menuButton.setAttribute("aria-expanded", "false");
+      });
+    });
+    document.querySelector("#year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
